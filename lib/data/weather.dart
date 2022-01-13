@@ -1,22 +1,34 @@
 class Weather {
-  String category;
   String date;
   int time;
-  int value;
+  int rn1; // 1시간 강수량
+  int pty; // 강수형태
+  int sky; // 하늘상태
+  int t1h; // 기온
+  int reh; // 습도
+  double wsd; // 풍속
 
   Weather({
-    required this.category,
     required this.date,
     required this.time,
-    required this.value,
+    required this.rn1,
+    required this.pty,
+    required this.sky,
+    required this.t1h,
+    required this.reh,
+    required this.wsd,
   });
 
   factory Weather.fromJson(Map<String, dynamic> data) {
     return Weather(
-      category: data['category'],
-      date: data['fastDate'],
+      date: data['fcstDate'],
       time: int.tryParse(data['fcstTime'] ?? '') ?? 0,
-      value: int.tryParse(data['fcstValue'] ?? '') ?? 0,
+      rn1: int.tryParse(data['RN1'] ?? '') ?? 0,
+      pty: int.tryParse(data['PTY'] ?? '') ?? 0,
+      sky: int.tryParse(data['SKY'] ?? '') ?? 0,
+      t1h: int.tryParse(data['T1H'] ?? '') ?? 0,
+      reh: int.tryParse(data['REH'] ?? '') ?? 0,
+      wsd: double.tryParse(data['WSD'] ?? '') ?? 0,
     );
   }
 }
