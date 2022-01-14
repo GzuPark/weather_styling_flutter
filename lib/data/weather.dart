@@ -32,3 +32,19 @@ class Weather {
     );
   }
 }
+
+class LocationData {
+  String name;
+  int? x;
+  int? y;
+  double lat;
+  double lon;
+
+  LocationData({
+    required this.name,
+    this.x,
+    this.y,
+    required this.lat,
+    required this.lon,
+  });
+}
