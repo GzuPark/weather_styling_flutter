@@ -48,3 +48,13 @@ class LocationData {
     required this.lon,
   });
 }
+
+class ClothTemperature {
+  int temperature;
+  List<String> cloth;
+
+  ClothTemperature({
+    required this.temperature,
+    required this.cloth,
+  });
+}

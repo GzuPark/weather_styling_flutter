@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:weather_styling_flutter/cloth.dart';
 import 'package:weather_styling_flutter/data/api.dart';
+import 'package:weather_styling_flutter/data/preference.dart';
 import 'package:weather_styling_flutter/utils.dart';
 
 import 'data/weather.dart';
@@ -61,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int level = 0;
   List<Weather> weather = [];
+  List<ClothTemperature> temperatureCloth = [];
   late Weather current;
 
   LocationData location = LocationData(name: '강남구', lat: 37.498122, lon: 127.027565);
@@ -70,6 +73,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void getWeather() async {
     var now = DateTime.now().toLocal();
     Map<String, int> xy = Utils.latLngToXY(location.lat, location.lon);
+
+    final pref = Preference();
+    temperatureCloth = await pref.getTemperature();
 
     int? x = xy['nx'];
     int? y = xy['ny'];
@@ -88,6 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     weather = await api.getWeather(x!, y!, Utils.getFormatTime(now), time);
     current = weather.first;
+
+    clothes = temperatureCloth.firstWhere((t) => t.temperature < current.t1h).cloth;
 
     level = getLevel(current);
 
@@ -114,6 +122,19 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.category),
+            onPressed: () async {
+              await Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => const ClothPage()));
+              getWeather();
+            },
+          )
+        ],
+      ),
       backgroundColor: colors[level],
       body: weather.isEmpty
           ? Container(
